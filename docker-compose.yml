@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  typecho:
+    build: .
+    volumes:
+      - ./webroot:/var/www/html
+    ports:
+      - "127.0.0.1:3030:9000"
+    container_name: typecho
+    restart: always
+    networks:
+      - default
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+
+  db:
+    image: mariadb
+    container_name: typecho_db
+    networks:
+      - default
+    volumes:
+      - ./mariadb:/var/lib/mysql
+      - ./dump.sql:/dump.sql
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: xxxxxxxxxxxxxxx
+      MARIADB_DATABASE: typecho
+      MARIADB_USER: typecho
+      MARIADB_PASSWORD: xxxxxxxxxxxxxxx
